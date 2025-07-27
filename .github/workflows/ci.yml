@@ -30,11 +30,13 @@ jobs:
         # Optional: to verify the JSON key file content in logs (remove for public repos)
         run: head -20 $HOME/gdrive-key.json
 
-      - name: Configure DVC to use Google Drive service account
+      - name: Configure DVC Google Drive Service Account
         run: |
-          # Replace 'my-mlops-storage' with your actual DVC remote name
+          # Tell DVC to use the service account for authentication
           dvc remote modify my-mlops-storage gdrive_use_service_account true
-          dvc remote modify my-mlops-storage --local gdrive_service_account_json_file_path $HOME/gdrive-key.json
+
+          # Pass the entire service account JSON as a single string
+          dvc remote modify my-mlops-storage --local gdrive_service_account_json_info '${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}'
 
       - name: Pull data with DVC
         run: dvc pull
