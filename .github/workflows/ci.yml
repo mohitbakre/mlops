@@ -29,8 +29,8 @@ jobs:
       - name: Configure DVC to use Google Drive service account
         run: |
           # Replace 'my-mlops-storage' with the actual name of your DVC remote
-          dvc remote modify "https://drive.google.com/drive/folders/1pxPYOiWtIKNvGXKEf4rxdJjd8mD8sXx1" gdrive_use_service_account true
-          dvc remote modify "https://drive.google.com/drive/folders/1pxPYOiWtIKNvGXKEf4rxdJjd8mD8sXx1" --local gdrive_service_account_json_file_path $HOME/gdrive-key.json
+          dvc remote modify my-mlops-storage gdrive_use_service_account true
+          dvc remote modify my-mlops-storage --local gdrive_service_account_json_file_path $HOME/gdrive-key.json
 
       - name: Pull data with DVC
         run: dvc pull
