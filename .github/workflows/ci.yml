@@ -23,7 +23,7 @@ jobs:
           pip install dvc[gdrive] mlflow scikit-learn pandas
 
       - name: Write Google Drive Service Account Key
-        # Use printf to output the secret with preserved formatting
+        # Use printf to output the secret with preserved formatting ok
         run: printf '%s' "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
 
       - name: Debug service account JSON file
