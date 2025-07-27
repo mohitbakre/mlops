@@ -24,7 +24,7 @@ jobs:
 
       - name: Write Google Drive Service Account Key
         # Write the service account JSON secret to a file for DVC to consume
-        run: echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
+        run: printf '%s' "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
 
       - name: Configure DVC to use Google Drive service account
         run: |
