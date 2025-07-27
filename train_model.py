@@ -6,7 +6,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score
 import os
 
-# Do NOT set tracking URI here; let MLflow pick up MLFLOW_TRACKING_URI env var from GitHub Actions
+# Do NOT set tracking URI here; let MLflow pick up MLFLOW_TRACKING_URI env var from GitHub Actions  ok
 
 with mlflow.start_run() as run:
     # 1. Load the data
@@ -50,5 +50,4 @@ with mlflow.start_run() as run:
     )
 
     print(f"MLflow Run ID: {run.info.run_id}")
-
 print("Training complete and metrics logged to MLflow.")
