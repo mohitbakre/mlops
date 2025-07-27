@@ -24,9 +24,7 @@ jobs:
 
       - name: Write Google Drive Service Account Key
         run: |
-          cat <<EOF > $HOME/gdrive-key.json
-${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}
-EOF
+          cat <<EOF > $HOME/gdrive-key.json ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}EOF
 
       - name: Debug service account JSON file
         run: head -20 $HOME/gdrive-key.json
