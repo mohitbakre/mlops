@@ -4,11 +4,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score
-from mlflow.models.signature import infer_signature
-import os
 
-# Important: Use file URI for Windows!
-mlflow.set_tracking_uri("file:///D:/devops_pipeline/mlops_pipeline/mlruns")
+# Do NOT add a mlflow.set_tracking_uri() line here.
+# MLflow will automatically use the MLFLOW_TRACKING_URI environment variable.
 
 # Start an MLflow run
 with mlflow.start_run() as run:
@@ -24,11 +22,11 @@ with mlflow.start_run() as run:
 
     # 3. Define the model and its parameters
     C_value = 0.5
-    model = LogisticRegression(C=C_value, solver="lbfgs")
+    model = LogisticRegression(C=C_value, solver="liblinear")
 
     # 4. Log the hyperparameters with MLflow
     mlflow.log_param("C", C_value)
-    mlflow.log_param("solver", "lbfgs")
+    mlflow.log_param("solver", "liblinear")
 
     # 5. Train the model
     model.fit(X_train, y_train)
@@ -44,11 +42,8 @@ with mlflow.start_run() as run:
     mlflow.log_metric("precision", precision)
     mlflow.log_metric("recall", recall)
 
-    signature = infer_signature(X_test, y_pred)
-    mlflow.sklearn.log_model(model, name="model", input_example=X_test.head(1), signature=signature)
-
     # 8. Log the model itself as an artifact
-    mlflow.sklearn.log_model(model, name="model")
+    mlflow.sklearn.log_model(model, "model")
 
     print(f"MLflow Run ID: {run.info.run_id}")
 
