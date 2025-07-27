@@ -31,7 +31,7 @@ jobs:
 
       - name: Run training script
         env:
-          MLFLOW_TRACKING_URI: "file://$GITHUB_WORKSPACE/mlruns"
+          MLFLOW_TRACKING_URI: file://${{ github.workspace }}/mlruns
         run: python train_model.py
 
       - name: Upload MLflow artifacts
