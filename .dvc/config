@@ -1,4 +1,6 @@
 [core]
     remote = my-mlops-storage
 ['remote "my-mlops-storage"']
-    url = gdrive://dvc-remote
+    url = gdrive://1pxPYOiWtIKNvGXKEf4rxdJjd8mD8sXx1
+    gdrive_client_id = 42523302113-vr6q6e6gql8qoogom62hubjogme2g1io.apps.googleusercontent.com
+    gdrive_client_secret = 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

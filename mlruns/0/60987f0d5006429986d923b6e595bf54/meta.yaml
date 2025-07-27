@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/devops_pipeline/mlops_pipeline/mlruns/0/60987f0d5006429986d923b6e595bf54/artifacts
+end_time: 1753595947313
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 60987f0d5006429986d923b6e595bf54
+run_name: nebulous-shad-88
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753595947218
+status: 4
+tags: []
+user_id: dell

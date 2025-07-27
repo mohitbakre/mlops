@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/devops_pipeline/mlops_pipeline/mlruns/0/e74c4174125a475fb498347169a7c867/artifacts
+end_time: 1753595627264
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: e74c4174125a475fb498347169a7c867
+run_name: bouncy-bass-204
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753595623424
+status: 3
+tags: []
+user_id: dell
