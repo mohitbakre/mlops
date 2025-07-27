@@ -23,14 +23,16 @@ jobs:
           pip install dvc[gdrive] mlflow scikit-learn pandas
 
       - name: Write Google Drive Service Account Key
-        run: |
-          cat <<EOF > $HOME/gdrive-key.json ${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}EOF
+        # Use printf to output the secret with preserved formatting
+        run: printf '%s' "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
 
       - name: Debug service account JSON file
+        # Optional: to verify the JSON key file content in logs (remove for public repos)
         run: head -20 $HOME/gdrive-key.json
 
       - name: Configure DVC to use Google Drive service account
         run: |
+          # Replace 'my-mlops-storage' with your actual DVC remote name
           dvc remote modify my-mlops-storage gdrive_use_service_account true
           dvc remote modify my-mlops-storage --local gdrive_service_account_json_file_path $HOME/gdrive-key.json
 
