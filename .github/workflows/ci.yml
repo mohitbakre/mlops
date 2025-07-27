@@ -20,26 +20,18 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install dvc[gdrive] mlflow scikit-learn pandas
+          pip install mlflow scikit-learn pandas
 
-      - name: Write Google Drive Service Account Key
-        # Use printf to output the secret with preserved formatting ok
-        run: printf '%s' "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
-
-      - name: Debug service account JSON file
-        # Optional: to verify the JSON key file content in logs (remove for public repos)
-        run: head -20 $HOME/gdrive-key.json
-
-      - name: Configure DVC Google Drive Service Account
+      - name: Download data for test run
         run: |
-          # Tell DVC to use the service account for authentication
-          dvc remote modify my-mlops-storage gdrive_use_service_account true
-
-          # Pass the entire service account JSON as a single string
-          dvc remote modify my-mlops-storage --local gdrive_service_account_json_info '${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}'
-
-      - name: Pull data with DVC
-        run: dvc pull
+          # Create data directory
+          mkdir -p data
+          # Download the Iris dataset directly (bypassing DVC for now)
+          curl -L "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data" -o data/iris.csv
+          # The dataset doesn't have headers, so let's add them
+          echo "sepal_length,sepal_width,petal_length,petal_width,target" > data/iris_headers.csv
+          cat data/iris.csv >> data/iris_headers.csv
+          mv data/iris_headers.csv data/iris.csv
 
       - name: Run training script
         env:
