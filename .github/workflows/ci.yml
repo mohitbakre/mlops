@@ -22,18 +22,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas
 
-      - name: Download data for test run
+      - name: Download dataset
         run: |
-          # Create data directory
           mkdir -p data
-          # Download the Iris dataset directly (bypassing DVC for now)
           curl -L "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data" -o data/iris.csv
-          # The dataset doesn't have headers, so let's add them
-          echo "sepal_length,sepal_width,petal_length,petal_width,target" > data/iris_headers.csv
-          cat data/iris.csv >> data/iris_headers.csv
-          mv data/iris_headers.csv data/iris.csv
+          echo "sepal_length,sepal_width,petal_length,petal_width,target" | cat - data/iris.csv > data/iris_with_headers.csv
+          mv data/iris_with_headers.csv data/iris.csv
 
       - name: Run training script
+        env:
+          MLFLOW_TRACKING_URI: "file://$GITHUB_WORKSPACE/mlruns"
         run: python train_model.py
 
       - name: Upload MLflow artifacts
