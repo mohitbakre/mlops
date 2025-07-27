@@ -4,9 +4,13 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+import os
 
 # Do NOT add a mlflow.set_tracking_uri() line here.
 # MLflow will automatically use the MLFLOW_TRACKING_URI environment variable.
+
+# A platform-agnostic way to set the tracking URI
+mlflow.set_tracking_uri(f"file://{os.getcwd()}/mlruns")
 
 # Start an MLflow run
 with mlflow.start_run() as run:

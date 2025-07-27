@@ -34,8 +34,6 @@ jobs:
           mv data/iris_headers.csv data/iris.csv
 
       - name: Run training script
-        env:
-          MLFLOW_TRACKING_URI: "file://$GITHUB_WORKSPACE/mlruns"
         run: python train_model.py
 
       - name: Upload MLflow artifacts

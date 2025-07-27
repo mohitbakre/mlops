@@ -1,0 +1,1 @@
+python -c "import json; print(json.dumps(json.load(open(r'C:\Users\dell\Downloads\dvc-gdrive-project-467112-de9921cd4244.json'))))"
