@@ -7,6 +7,7 @@ on:
 jobs:
   train-model:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,29 +22,23 @@ jobs:
           python -m pip install --upgrade pip
           pip install dvc[gdrive] mlflow scikit-learn pandas
 
-      - name: Configure DVC headless authentication
-        env:
-          GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
-          GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
-          GDRIVE_AUTH_JSON: ${{ secrets.GDRIVE_AUTH_JSON }}
+      - name: Write Google Drive Service Account Key
+        # Write the service account JSON secret to a file for DVC to consume
+        run: echo "${{ secrets.GDRIVE_SERVICE_ACCOUNT_JSON }}" > $HOME/gdrive-key.json
+
+      - name: Configure DVC to use Google Drive service account
         run: |
-          # Create the DVC config directory
-          mkdir -p ~/.config/dvc
-          # Write the auth JSON to a file that DVC can find
-          echo "$GDRIVE_AUTH_JSON" > ~/.config/dvc/gdrive_user_credentials.json
-          # Modify the remote to use the credentials and the folder ID
-          dvc remote modify my-mlops-storage gdrive_client_id $GDRIVE_CLIENT_ID
-          dvc remote modify my-mlops-storage gdrive_client_secret $GDRIVE_CLIENT_SECRET
+          # Replace 'my-mlops-storage' with the actual name of your DVC remote
+          dvc remote modify "https://drive.google.com/drive/folders/1pxPYOiWtIKNvGXKEf4rxdJjd8mD8sXx1" gdrive_use_service_account true
+          dvc remote modify "https://drive.google.com/drive/folders/1pxPYOiWtIKNvGXKEf4rxdJjd8mD8sXx1" --local gdrive_service_account_json_file_path $HOME/gdrive-key.json
 
       - name: Pull data with DVC
-        run: |
-          dvc pull
+        run: dvc pull
 
       - name: Run training script
-        run: |
-          # Set the MLflow tracking URI
-          export MLFLOW_TRACKING_URI="file://$GITHUB_WORKSPACE/mlruns"
-          python train_model.py
+        env:
+          MLFLOW_TRACKING_URI: "file://$GITHUB_WORKSPACE/mlruns"
+        run: python train_model.py
 
       - name: Upload MLflow artifacts
         uses: actions/upload-artifact@v4
