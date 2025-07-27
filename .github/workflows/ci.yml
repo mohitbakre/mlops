@@ -21,20 +21,27 @@ jobs:
           python -m pip install --upgrade pip
           pip install dvc[gdrive] mlflow scikit-learn pandas
 
-      - name: Configure DVC remote and pull data
+      - name: Configure DVC headless authentication
         env:
           GDRIVE_CLIENT_ID: ${{ secrets.GDRIVE_CLIENT_ID }}
           GDRIVE_CLIENT_SECRET: ${{ secrets.GDRIVE_CLIENT_SECRET }}
+          GDRIVE_AUTH_JSON: ${{ secrets.GDRIVE_AUTH_JSON }}
         run: |
-          # Configure the DVC remote with the stored GitHub Secrets
+          # Create the DVC config directory
+          mkdir -p ~/.config/dvc
+          # Write the auth JSON to a file that DVC can find
+          echo "$GDRIVE_AUTH_JSON" > ~/.config/dvc/gdrive_user_credentials.json
+          # Modify the remote to use the credentials and the folder ID
           dvc remote modify my-mlops-storage gdrive_client_id $GDRIVE_CLIENT_ID
           dvc remote modify my-mlops-storage gdrive_client_secret $GDRIVE_CLIENT_SECRET
-          # Use DVC to pull the data from Google Drive
+
+      - name: Pull data with DVC
+        run: |
           dvc pull
 
       - name: Run training script
         run: |
-          # Set the MLflow tracking URI, which was our final fix
+          # Set the MLflow tracking URI
           export MLFLOW_TRACKING_URI="file://$GITHUB_WORKSPACE/mlruns"
           python train_model.py
 
